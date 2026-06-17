@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aryan Jain — Electronic & Information Engineering</title>
+<meta name="description" content="Aryan Jain — Electronic & Information Engineering student at Imperial College London. I build at the line where software meets silicon: FPGA, RTL and embedded systems." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    /* palette: monochrome zinc + single blue accent (portfolio/personal) */
+    --paper:#FAFAFA; --panel:#FFFFFF; --panel-2:#F4F4F5;
+    --ink:#18181B; --ink-2:#09090B; --muted:#64748B; --hairline:#E4E4E7; --hairline-2:#D4D8DF;
+    --accent:#2563EB; --accent-ink:#1D4FD7;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --maxw:1080px; --gut:clamp(20px,5vw,56px); --r:2px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  a{color:inherit}
+  ::selection{background:var(--accent);color:#fff}
+
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(var(--hairline) 1px,transparent 1px),linear-gradient(90deg,var(--hairline) 1px,transparent 1px);
+    background-size:48px 48px;opacity:.4;
+    -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000 30%,transparent 80%);mask-image:radial-gradient(120% 90% at 50% 0%,#000 30%,transparent 80%)}
+
+  .wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+
+  header.bar{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(8px);background:color-mix(in srgb,var(--paper) 82%,transparent);border-bottom:1px solid var(--hairline)}
+  .bar-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .mark{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted)}
+  .mark b{color:var(--ink);font-weight:500}
+  nav.links{display:flex;gap:8px;font-family:var(--mono);font-size:13px}
+  nav.links a{color:var(--muted);text-decoration:none;position:relative;padding:10px 8px;min-height:44px;display:inline-flex;align-items:center;transition:color .2s ease}
+  nav.links a:hover{color:var(--ink)}
+  nav.links a::after{content:"";position:absolute;left:8px;right:100%;bottom:6px;height:1px;background:var(--accent);transition:right .25s ease}
+  nav.links a:hover::after,nav.links a.active::after{right:8px}
+  nav.links a.active{color:var(--ink)}
+  @media(max-width:680px){nav.links{display:none}}
+
+  .hero{position:relative;padding:clamp(72px,13vw,140px) 0 clamp(56px,9vw,96px)}
+  #field{position:absolute;inset:-10% -2% auto -2%;height:118%;width:104%;z-index:0;opacity:.5;
+    -webkit-mask-image:radial-gradient(80% 78% at 38% 42%,#000 18%,transparent 72%);mask-image:radial-gradient(80% 78% at 38% 42%,#000 18%,transparent 72%);filter:blur(2px)}
+  .hero .wrap{position:relative}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
+  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+  .eyebrow .rev{margin-left:auto;color:var(--accent)}
+  @media(max-width:680px){.eyebrow .rev{margin-left:0}}
+  h1.name{font-family:var(--display);font-weight:700;font-size:clamp(44px,9.5vw,104px);line-height:.96;letter-spacing:-.03em;margin:0 0 22px}
+  .lede{font-size:clamp(19px,2.4vw,24px);line-height:1.45;max-width:32ch;margin:0 0 14px;font-weight:400}
+  .lede b{font-weight:600}
+  .sub{color:var(--muted);max-width:56ch;margin:0 0 36px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:14px;text-decoration:none;padding:13px 22px;min-height:44px;border:1px solid var(--ink);border-radius:var(--r);display:inline-flex;align-items:center;gap:9px;transition:transform .15s ease,background .2s ease,color .2s ease,border-color .2s ease}
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+  .btn .arr{transition:transform .2s ease}
+  .btn:hover .arr{transform:translate(3px,-3px)}
+
+  section{position:relative;padding:clamp(56px,9vw,104px) 0;border-top:1px solid var(--hairline)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:44px}
+  .sec-tag{font-family:var(--mono);font-size:12.5px;color:var(--accent);letter-spacing:.08em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;margin:0;line-height:1.05}
+
+  .about-grid{display:grid;grid-template-columns:1.3fr .9fr;gap:clamp(28px,5vw,64px);align-items:start}
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:34px}}
+  .about-grid p{margin:0 0 18px;font-size:18px;max-width:64ch}
+  .about-grid p:last-child{margin-bottom:0}
+  .specs{border:1px solid var(--hairline);background:var(--panel);border-radius:var(--r);overflow:hidden}
+  .spec-row{display:flex;justify-content:space-between;gap:18px;padding:14px 18px;border-bottom:1px solid var(--hairline);font-family:var(--mono);font-size:13px}
+  .spec-row:last-child{border-bottom:0}
+  .spec-row .k{color:var(--muted);letter-spacing:.04em}
+  .spec-row .v{color:var(--ink);text-align:right;font-weight:500}
+
+  .xp{border-top:1px solid var(--hairline)}
+  .xp-row{display:grid;grid-template-columns:170px 1fr;gap:clamp(16px,4vw,48px);padding:28px 0;border-bottom:1px solid var(--hairline);align-items:start}
+  @media(max-width:680px){.xp-row{grid-template-columns:1fr;gap:8px;padding:24px 0}}
+  .xp-when{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.04em;padding-top:5px}
+  .xp h3{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.01em;margin:0 0 2px;line-height:1.2}
+  .xp .org{font-family:var(--mono);font-size:13px;color:var(--accent);margin-bottom:12px}
+  .xp p{margin:0;color:#27272A;max-width:62ch;font-size:16px}
+
+  .proj{border:1px solid var(--hairline);background:var(--panel);border-radius:var(--r);overflow:hidden;margin-bottom:26px;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+  .proj:hover{transform:translateY(-3px);border-color:var(--hairline-2);box-shadow:0 10px 34px -16px rgba(16,20,30,.22)}
+  .proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:clamp(22px,3.5vw,34px) clamp(22px,3.5vw,34px) 0}
+  .proj-id{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em}
+  .proj h3{font-family:var(--display);font-weight:600;font-size:clamp(20px,3vw,27px);letter-spacing:-.01em;margin:8px 0 0;line-height:1.14}
+  .proj .role{font-family:var(--mono);font-size:12.5px;color:var(--accent);white-space:nowrap;padding-top:4px;text-align:right}
+  .proj-body{padding:18px clamp(22px,3.5vw,34px) clamp(22px,3.5vw,34px)}
+  .proj-body>p{margin:0 0 22px;max-width:64ch;color:#27272A}
+  .datatable{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));border-top:1px solid var(--hairline);border-left:1px solid var(--hairline)}
+  .cell{border-right:1px solid var(--hairline);border-bottom:1px solid var(--hairline);padding:12px 14px;background:var(--panel-2)}
+  .cell .ck{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+  .cell .cv{font-family:var(--mono);font-size:14px;font-weight:500}
+  .cell .cv em{font-style:normal;color:var(--accent)}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .tag{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--hairline);border-radius:var(--r);padding:5px 10px}
+  .proj-links{display:flex;gap:18px;margin-top:24px;font-family:var(--mono);font-size:13px;flex-wrap:wrap}
+  .proj-links a{color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:32px}
+  .proj-links a:hover{color:var(--accent-ink);text-decoration:underline}
+
+  .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,36px)}
+  @media(max-width:760px){.skills{grid-template-columns:1fr}}
+  .skill-col h4{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 16px;font-weight:500}
+  .skill-col ul{list-style:none;margin:0;padding:0}
+  .skill-col li{padding:9px 0;border-bottom:1px solid var(--hairline);font-size:15.5px;display:flex;align-items:center;gap:10px}
+  .skill-col li::before{content:"";width:5px;height:5px;background:var(--accent);flex:none;transform:rotate(45deg)}
+  .skill-col li:last-child{border-bottom:0}
+
+  .contact .wrap{text-align:center}
+  .contact h2{margin-bottom:14px}
+  .contact>.wrap>p{color:var(--muted);max-width:46ch;margin:0 auto 34px}
+  .contact-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  footer{border-top:1px solid var(--hairline);padding:30px 0}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r)}
+
+  /* scroll-reveal (JS-gated; only added when motion is allowed) */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1)}
+  .reveal.is-in{opacity:1;transform:none}
+
+  /* hero load-in only when motion is allowed */
+  @media(prefers-reduced-motion:no-preference){
+    .hero .eyebrow,.hero h1,.hero .lede,.hero .sub,.hero .cta-row{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+    .hero h1{animation-delay:.06s}.hero .lede{animation-delay:.14s}.hero .sub{animation-delay:.2s}.hero .cta-row{animation-delay:.26s}
+    @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .btn,.btn .arr,nav.links a,nav.links a::after,.proj{transition:none}
+    .proj:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-inner">
+    <span class="mark"><b>AJ</b> — EIE / Imperial</span>
+    <nav class="links">
+      <a href="#about">about</a>
+      <a href="#experience">experience</a>
+      <a href="#work">work</a>
+      <a href="#skills">skills</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-label="Intro">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div class="eyebrow">
+        <span class="dot"></span><span>Electronic &amp; Information Engineering</span>
+        <span>·</span><span>Imperial College London</span>
+        <span class="rev">REV·2026</span>
+      </div>
+      <h1 class="name">Aryan<br>Jain</h1>
+      <p class="lede">I build at the line where <b>software meets silicon</b> — turning algorithms into real-time logic on hardware.</p>
+      <p class="sub">Engineering student working in SystemVerilog, C and Python, with a soft spot for FPGAs, processor microarchitecture, and getting things to run in real time on a chip rather than a CPU. Previously interned at Accenture and Optiver, and led a 60-person platoon in the Singapore Armed Forces.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#work">View work <span class="arr">↗</span></a>
+        <a class="btn ghost" href="Aryan_Resume.pdf" target="_blank" rel="noopener">Download CV <span class="arr">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" aria-label="About">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">01</span><h2>About</h2></div>
+      <div class="about-grid">
+        <div>
+          <p>I'm an MEng Electronic &amp; Information Engineering student at Imperial College London. Most of my interest sits at the boundary between software and hardware: register-transfer-level design, processor microarchitecture, embedded systems, and accelerating real workloads on FPGAs.</p>
+          <p>I like problems where the constraint <em>is</em> the design — a fixed clock, limited DSP slices, a video frame that has to be ready before the next pixel-clock edge. Recently that's meant building a fully pipelined neural network on a PYNQ-Z1 that renders a classifier's decision boundary in real time, about 40× faster than the CPU doing the same maths.</p>
+          <p>Alongside the engineering, I've spent time in very different rooms — backend development at Accenture, a trading academy at Optiver, and leadership in the Singapore Armed Forces. Currently open to internship opportunities in hardware, FPGA and embedded engineering.</p>
+        </div>
+        <div class="specs" aria-label="Quick facts">
+          <div class="spec-row"><span class="k">DEGREE</span><span class="v">MEng EIE</span></div>
+          <div class="spec-row"><span class="k">UNIVERSITY</span><span class="v">Imperial College London</span></div>
+          <div class="spec-row"><span class="k">YEARS</span><span class="v">2024 — 2028</span></div>
+          <div class="spec-row"><span class="k">IB</span><span class="v">41 / 42 · UWCSEA</span></div>
+          <div class="spec-row"><span class="k">LOCATION</span><span class="v">London, UK</span></div>
+          <div class="spec-row"><span class="k">STATUS</span><span class="v">Open to internships</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" aria-label="Experience">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">02</span><h2>Experience</h2></div>
+      <div class="xp">
+        <div class="xp-row">
+          <div class="xp-when">JUL — SEP 2025</div>
+          <div>
+            <h3>Software Development Intern</h3>
+            <div class="org">Accenture · Singapore</div>
+            <p>Built backend workflow automation in C# with validation and preprocessing layers. Shipped a cross-platform data slicer adopted by 60+ colleagues that cut daily manual processing by 40%, plus a Mermaid-based message-flow visualiser that let 100+ developers trace system-level interactions. Worked with QA to clear SIT/UAT blockers and improve release stability.</p>
+          </div>
+        </div>
+        <div class="xp-row">
+          <div class="xp-when">MAY — JUN 2025</div>
+          <div>
+            <h3>Trading Intern</h3>
+            <div class="org">Optiver · Imperial Trading Academy · London</div>
+            <p>Intensive training in options, derivatives pricing, market-making and execution algorithms. Ranked in the top tier for decision quality and PnL stability across competitive trading simulations.</p>
+          </div>
+        </div>
+        <div class="xp-row">
+          <div class="xp-when">2022 — 2024</div>
+          <div>
+            <h3>Platoon Sergeant, Guards Formation</h3>
+            <div class="org">Singapore Armed Forces · Singapore</div>
+            <p>Led and trained a 60-person platoon in advanced infantry tactics and physical conditioning, and coordinated mission planning and safety oversight for high-intensity field exercises. Awarded the Commander's Coin and a Certificate of Recognition for leadership.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" aria-label="Selected work">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">03</span><h2>Selected work</h2></div>
+
+      <article class="proj">
+        <div class="proj-top">
+          <div><span class="proj-id">PROJ·01</span><h3>Hardware-Accelerated Neural Network Decision Visualiser</h3></div>
+          <span class="role">RTL / hardware accelerator</span>
+        </div>
+        <div class="proj-body">
+          <p>A fully pipelined 16→64→32→3 MLP built in SystemVerilog on a PYNQ-Z1, running one complete neural-network forward pass <em>per pixel</em> to render a classifier's decision boundary as a live colour heatmap — 640×480 streamed to HDMI at roughly 20 fps. That's about 40× faster than an equivalent C++/SDL2 CPU baseline (and, by estimate, ~730× more energy-efficient), saturating all 220 DSP slices on the chip. The same hardware retargets any tabular dataset of up to 16 features at runtime; demoed on Iris and the 16-feature Dry Bean set. I led the core HDL datapath with one teammate — the multiply-accumulate units, the three-layer pipeline, weight RAM, and the output FIFO.</p>
+          <div class="datatable">
+            <div class="cell"><span class="ck">Target</span><span class="cv">PYNQ-Z1 · Zynq-7000</span></div>
+            <div class="cell"><span class="ck">Network</span><span class="cv">16→64→32→3 MLP</span></div>
+            <div class="cell"><span class="ck">Throughput</span><span class="cv">640×480 @ <em>~20 fps</em></span></div>
+            <div class="cell"><span class="ck">vs CPU</span><span class="cv"><em>~40×</em> faster</span></div>
+            <div class="cell"><span class="ck">DSP usage</span><span class="cv"><em>220</em> / 220 · 100%</span></div>
+            <div class="cell"><span class="ck">Arithmetic</span><span class="cv">Q1.15 · Q4.4 fixed-point</span></div>
+          </div>
+          <div class="tags">
+            <span class="tag">SystemVerilog</span><span class="tag">Vivado</span><span class="tag">PYNQ-Z1</span>
+            <span class="tag">DSP / MAC pipeline</span><span class="tag">AXI-Stream / AXI-Lite</span>
+            <span class="tag">Fixed-point</span><span class="tag">HDMI video</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/Adi-111111/Snytax-Error" target="_blank" rel="noopener">GitHub ↗</a>
+            <a href="Design_Project_Summer__26-4.pdf" target="_blank" rel="noopener">Report (PDF) ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-top">
+          <div><span class="proj-id">PROJ·02</span><h3>Gesture-Controlled Collaborative Whiteboard</h3></div>
+          <span class="role">FPGA · ML · cloud</span>
+        </div>
+        <div class="proj-body">
+          <p>A real-time, multi-user whiteboard you draw on with hand gestures in the air. Webcam frames are turned into hand landmarks, classified by a neural network accelerated on a PYNQ-Z1 FPGA to keep latency low, and the resulting strokes sync live across clients through a cloud-hosted server. The result feels instant despite the heavy vision pipeline behind it.</p>
+          <div class="datatable">
+            <div class="cell"><span class="ck">Accelerator</span><span class="cv">PYNQ-Z1 FPGA</span></div>
+            <div class="cell"><span class="ck">Model</span><span class="cv">MLP gesture classifier</span></div>
+            <div class="cell"><span class="ck">Vision</span><span class="cv">MediaPipe · OpenCV</span></div>
+            <div class="cell"><span class="ck">Sync</span><span class="cv">Flask · Socket.IO</span></div>
+            <div class="cell"><span class="ck">Cloud</span><span class="cv">AWS EC2</span></div>
+            <div class="cell"><span class="ck">Latency</span><span class="cv"><em>real-time</em> multi-user</span></div>
+          </div>
+          <div class="tags">
+            <span class="tag">PYNQ-Z1</span><span class="tag">PyTorch</span><span class="tag">Python</span>
+            <span class="tag">MediaPipe</span><span class="tag">Flask / Socket.IO</span><span class="tag">AWS</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/Adi-111111/Info-Proc-CW" target="_blank" rel="noopener">GitHub ↗</a>
+            <a href="https://youtu.be/ka_kZNjIJMg" target="_blank" rel="noopener">Demo video ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-top">
+          <div><span class="proj-id">PROJ·03</span><h3>5-Stage Pipelined RISC-V CPU + Data Cache</h3></div>
+          <span class="role">RTL / microarchitecture</span>
+        </div>
+        <div class="proj-body">
+          <p>An RV32I processor built from scratch in SystemVerilog: a full five-stage pipeline with forwarding, load-use stalls, and branch/jump flushing, paired with a 2-way set-associative write-back data cache (LRU, multi-cycle miss handling). Validated with custom Verilator testbenches, including a Gaussian-histogram workload built specifically to stress hazards and cache behaviour. The team also pushed into superscalar and branch-prediction variants.</p>
+          <div class="tags">
+            <span class="tag">SystemVerilog</span><span class="tag">Verilator</span><span class="tag">RV32I</span>
+            <span class="tag">Pipelining</span><span class="tag">Caches</span><span class="tag">Hazard handling</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/shivamsangani/IAC-Project-Team15" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-top">
+          <div><span class="proj-id">PROJ·04</span><h3>C Compiler</h3></div>
+          <span class="role">compilers / low-level</span>
+        </div>
+        <div class="proj-body">
+          <p>A compiler that translates a subset of C into RISC-V assembly — lexing, parsing, and code generation with correct handling of the things that actually bite: function calls and the calling convention, control flow, scope, and the stack frame. Built for Imperial's Language Processors coursework. <!-- VERIFY: I couldn't read this repo (it may be private) — tweak this description to match exactly what you built. --></p>
+          <div class="tags">
+            <span class="tag">Compilers</span><span class="tag">RISC-V</span><span class="tag">Lexing / parsing</span>
+            <span class="tag">Code generation</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/LangProc/langproc-2025-cw-NairJain" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-top">
+          <div><span class="proj-id">PROJ·05</span><h3>Multithreaded UDP Chat System</h3></div>
+          <span class="role">systems / concurrency</span>
+        </div>
+        <div class="proj-body">
+          <p>A concurrent UDP client–server chat written in C. Each client runs dedicated sender and listener threads while the server spawns a thread per packet, all coordinated through a thread-safe client registry using reader–writer locks. Supports broadcast and private messaging, mute, rename and admin kick, with a 15-message history buffer and a min-heap inactivity-removal engine driven by ping/pong logic.</p>
+          <div class="tags">
+            <span class="tag">C</span><span class="tag">POSIX threads</span><span class="tag">UDP sockets</span>
+            <span class="tag">Reader–writer locks</span><span class="tag">Min-heap</span>
+          </div>
+          <!-- EDIT: add the repo link for this project if you have one -->
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="skills" aria-label="Skills">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">04</span><h2>Toolbox</h2></div>
+      <div class="skills">
+        <div class="skill-col">
+          <h4>Hardware / RTL</h4>
+          <ul>
+            <li>SystemVerilog</li><li>FPGA — PYNQ / Zynq</li><li>RISC-V microarchitecture</li>
+            <li>Pipelining &amp; caches</li><li>Verilator</li><li>Fixed-point datapaths</li>
+          </ul>
+        </div>
+        <div class="skill-col">
+          <h4>Software / Systems</h4>
+          <ul>
+            <li>C / C++</li><li>Python</li><li>C# · Java · SQL</li>
+            <li>POSIX threads · concurrency</li><li>UDP / sockets</li><li>Bash</li>
+          </ul>
+        </div>
+        <div class="skill-col">
+          <h4>Tools &amp; Cloud</h4>
+          <ul>
+            <li>Git</li><li>AWS (EC2)</li><li>Azure</li>
+            <li>Visual Studio</li><li>MediaPipe / OpenCV</li><li>Fusion 360</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" aria-label="Contact">
+    <div class="wrap">
+      <div class="sec-head" style="justify-content:center"><span class="sec-tag">05</span><h2>Get in touch</h2></div>
+      <p>The fastest way to reach me is email. Happy to talk about hardware, embedded work, or anything in between.</p>
+      <div class="contact-row">
+        <a class="btn primary" href="mailto:aryan.jain22@imperial.ac.uk">Email me <span class="arr">↗</span></a>
+        <a class="btn ghost" href="https://github.com/aryanja" target="_blank" rel="noopener">GitHub <span class="arr">↗</span></a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/aryan-jain-46541821a" target="_blank" rel="noopener">LinkedIn <span class="arr">↗</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Aryan Jain</span>
+    <span>Built from scratch · hand-coded HTML</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Hero: slow neural decision-boundary field (nods to the FPGA gesture classifier) */
+  (function(){
+    var cv = document.getElementById('field'); if(!cv) return;
+    var ctx = cv.getContext('2d'); var GW=72, GH=44; cv.width=GW; cv.height=GH;
+    var p=[{x:.26,y:.34,c:[208,90,90]},{x:.70,y:.30,c:[90,160,106]},{x:.48,y:.74,c:[90,120,208]}];
+    function d2(ax,ay,bx,by){var dx=ax-bx,dy=ay-by;return dx*dx+dy*dy;}
+    function draw(t){
+      p[0].cx=p[0].x+Math.sin(t*0.00013)*0.12;   p[0].cy=p[0].y+Math.cos(t*0.00017)*0.10;
+      p[1].cx=p[1].x+Math.sin(t*0.00011+2)*0.11; p[1].cy=p[1].y+Math.cos(t*0.00015+1)*0.12;
+      p[2].cx=p[2].x+Math.sin(t*0.00016+4)*0.10; p[2].cy=p[2].y+Math.cos(t*0.00012+3)*0.11;
+      var img=ctx.createImageData(GW,GH),a=img.data,i=0;
+      for(var y=0;y<GH;y++)for(var x=0;x<GW;x++){
+        var fx=x/GW,fy=y/GH,w0=1/(5e-4+d2(fx,fy,p[0].cx,p[0].cy)),w1=1/(5e-4+d2(fx,fy,p[1].cx,p[1].cy)),w2=1/(5e-4+d2(fx,fy,p[2].cx,p[2].cy)),s=w0+w1+w2;
+        a[i++]=(p[0].c[0]*w0+p[1].c[0]*w1+p[2].c[0]*w2)/s;
+        a[i++]=(p[0].c[1]*w0+p[1].c[1]*w1+p[2].c[1]*w2)/s;
+        a[i++]=(p[0].c[2]*w0+p[1].c[2]*w1+p[2].c[2]*w2)/s; a[i++]=255;
+      }
+      ctx.putImageData(img,0,0);
+    }
+    if(reduce){draw(0);return;}
+    var last=0;(function loop(t){if(t-last>66){draw(t);last=t;}requestAnimationFrame(loop);})(0);
+  })();
+
+  /* Scroll-triggered reveals (only when motion allowed) */
+  if(!reduce && 'IntersectionObserver' in window){
+    var els=document.querySelectorAll('.sec-head,.about-grid>div,.xp-row,.proj,.skill-col,.contact-row');
+    els.forEach(function(el){el.classList.add('reveal');});
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);}});
+    },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(el){io.observe(el);});
+  }
+
+  /* Active-nav scroll-spy */
+  (function(){
+    var links=document.querySelectorAll('nav.links a'); if(!links.length) return;
+    var map={}; links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+    var spy=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){links.forEach(function(x){x.classList.remove('active');}); if(map[e.target.id]) map[e.target.id].classList.add('active');}
+      });
+    },{rootMargin:'-45% 0px -50% 0px'});
+    document.querySelectorAll('main section[id]').forEach(function(s){spy.observe(s);});
+  })();
+</script>
+</body>
+</html>
