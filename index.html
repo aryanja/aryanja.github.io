@@ -141,6 +141,28 @@
     .btn,.btn .arr,nav.links a,nav.links a::after,.proj{transition:none}
     .proj:hover{transform:none}
   }
+  /* interactive demo */
+  #demo .demo-lede{color:var(--muted);max-width:62ch;margin:-20px 0 34px;font-size:17px}
+  .demo-grid{display:grid;grid-template-columns:1.6fr .9fr;gap:clamp(20px,3vw,40px);align-items:start}
+  @media(max-width:760px){.demo-grid{grid-template-columns:1fr}}
+  .demo-stage{position:relative;border:1px solid var(--hairline);border-radius:var(--r);overflow:hidden;background:#0b0d12;aspect-ratio:4/3}
+  #boundary{display:block;width:100%;height:100%}
+  .probe{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:#fff;background:rgba(10,12,16,.55);backdrop-filter:blur(4px);padding:6px 9px;border-radius:var(--r);pointer-events:none;opacity:.0;transition:opacity .15s ease;white-space:nowrap}
+  .demo-stage:hover .probe{opacity:1}
+  .demo-controls{display:flex;flex-direction:column;gap:18px}
+  .ctrl label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:9px}
+  .ctrl label .val{color:var(--accent)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:var(--hairline-2);border-radius:2px;outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;cursor:pointer}
+  .demo-btns{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:2px}
+  .demo-btn{font-family:var(--mono);font-size:13px;padding:10px 16px;min-height:44px;border:1px solid var(--ink);background:var(--panel);border-radius:var(--r);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s ease,color .2s ease,transform .15s ease}
+  .demo-btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+  .anim-toggle{font-family:var(--mono);font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+  .anim-toggle input{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
+  .demo-legend{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;margin-top:4px}
+  .demo-legend span{display:inline-flex;align-items:center;gap:7px}
+  .demo-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
 </style>
 </head>
 <body>
@@ -149,6 +171,7 @@
   <div class="wrap bar-inner">
     <span class="mark"><b>AJ</b> — EIE / Imperial</span>
     <nav class="links">
+      <a href="#demo">demo</a>
       <a href="#about">about</a>
       <a href="#experience">experience</a>
       <a href="#work">work</a>
@@ -173,6 +196,33 @@
       <div class="cta-row">
         <a class="btn primary" href="#work">View work <span class="arr">↗</span></a>
         <a class="btn ghost" href="Aryan_Resume.pdf" target="_blank" rel="noopener">Download CV <span class="arr">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" aria-label="Interactive decision-boundary demo">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">LIVE</span><h2>Try it yourself</h2></div>
+      <p class="demo-lede">Below is a tiny neural network running live in your browser — the same idea as my FPGA project. Drag the sliders to change its inputs and watch the decision boundary redraw in real time. Hover the image to probe any point. (On the actual board this renders 640×480 to a monitor at ~20&nbsp;fps in hardware; here it's just JavaScript, but the concept is identical.)</p>
+      <div class="demo-grid">
+        <div class="demo-stage">
+          <canvas id="boundary" width="144" height="108" aria-label="Live neural network decision boundary"></canvas>
+          <div class="probe" id="probe">hover to probe</div>
+        </div>
+        <div class="demo-controls">
+          <div class="ctrl"><label for="f0">Feature 1 <span class="val" id="v0">0.50</span></label><input type="range" id="f0" min="0" max="1" step="0.01" value="0.5"></div>
+          <div class="ctrl"><label for="f1">Feature 2 <span class="val" id="v1">0.50</span></label><input type="range" id="f1" min="0" max="1" step="0.01" value="0.5"></div>
+          <div class="ctrl"><label for="f2">Feature 3 <span class="val" id="v2">0.50</span></label><input type="range" id="f2" min="0" max="1" step="0.01" value="0.5"></div>
+          <div class="demo-btns">
+            <button class="demo-btn" id="reroll" type="button">↻ New network</button>
+            <label class="anim-toggle"><input type="checkbox" id="drift"> auto-drift</label>
+          </div>
+          <div class="demo-legend">
+            <span><i style="background:#d05a5a"></i>class A → red</span>
+            <span><i style="background:#5aa06a"></i>class B → green</span>
+            <span><i style="background:#5a78d0"></i>class C → blue</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -435,6 +485,53 @@
       });
     },{rootMargin:'-45% 0px -50% 0px'});
     document.querySelectorAll('main section[id]').forEach(function(s){spy.observe(s);});
+  })();
+  /* Interactive in-browser MLP decision-boundary playground */
+  (function(){
+    var cv=document.getElementById('boundary'); if(!cv) return;
+    var ctx=cv.getContext('2d'); var GW=cv.width, GH=cv.height;
+    var IN=5, H=14, W1,b1,W2,b2, held=[0.5,0.5,0.5];
+    var C=[[208,90,90],[90,160,106],[90,120,208]], NAMES=['A','B','C'];
+    function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+    function build(seed){
+      var r=rng(seed); W1=[];b1=[];W2=[];b2=[];
+      for(var i=0;i<H;i++){var row=[];for(var j=0;j<IN;j++)row.push((r()*2-1)*3.0);W1.push(row);b1.push((r()*2-1)*0.6);}
+      for(var o=0;o<3;o++){var r2=[];for(var k=0;k<H;k++)r2.push((r()*2-1)*2.2);W2.push(r2);b2.push((r()*2-1)*0.3);}
+    }
+    function forward(x,y){
+      var inp=[x-0.5,y-0.5,held[0]-0.5,held[1]-0.5,held[2]-0.5], hid=new Array(H), i,j,k,o;
+      for(i=0;i<H;i++){var s=b1[i],w=W1[i];for(j=0;j<IN;j++)s+=w[j]*inp[j];hid[i]=s>0?s:0;}
+      var lo=[b2[0],b2[1],b2[2]];
+      for(o=0;o<3;o++){var w2=W2[o];for(k=0;k<H;k++)lo[o]+=w2[k]*hid[k];}
+      var t=0.6,m=Math.max(lo[0],lo[1],lo[2]),e0=Math.exp((lo[0]-m)/t),e1=Math.exp((lo[1]-m)/t),e2=Math.exp((lo[2]-m)/t),su=e0+e1+e2;
+      return [e0/su,e1/su,e2/su];
+    }
+    function rgb(p){return [p[0]*C[0][0]+p[1]*C[1][0]+p[2]*C[2][0], p[0]*C[0][1]+p[1]*C[1][1]+p[2]*C[2][1], p[0]*C[0][2]+p[1]*C[1][2]+p[2]*C[2][2]];}
+    function render(){
+      var img=ctx.createImageData(GW,GH),d=img.data,idx=0,gx,gy;
+      for(gy=0;gy<GH;gy++)for(gx=0;gx<GW;gx++){var c=rgb(forward(gx/GW,gy/GH));d[idx++]=c[0];d[idx++]=c[1];d[idx++]=c[2];d[idx++]=255;}
+      ctx.putImageData(img,0,0);
+    }
+    var pending=false;
+    function schedule(){if(pending)return;pending=true;requestAnimationFrame(function(){pending=false;render();});}
+    function bind(id,vi,n){var el=document.getElementById(id),v=document.getElementById(vi);el.addEventListener('input',function(){held[n]=parseFloat(el.value);v.textContent=held[n].toFixed(2);schedule();});}
+    bind('f0','v0',0);bind('f1','v1',1);bind('f2','v2',2);
+    document.getElementById('reroll').addEventListener('click',function(){build((Math.random()*1e9)|0);schedule();});
+    var probe=document.getElementById('probe');
+    cv.addEventListener('pointermove',function(e){
+      var rct=cv.getBoundingClientRect(),x=(e.clientX-rct.left)/rct.width,y=(e.clientY-rct.top)/rct.height;
+      if(x<0||x>1||y<0||y>1)return;
+      var p=forward(x,y),c=rgb(p),best=p[0]>=p[1]&&p[0]>=p[2]?0:(p[1]>=p[2]?1:2);
+      probe.textContent='class '+NAMES[best]+'  ·  rgb('+Math.round(c[0])+','+Math.round(c[1])+','+Math.round(c[2])+')';
+    });
+    var drift=document.getElementById('drift'),raf=null;
+    function loop(t){
+      held[0]=0.5+0.45*Math.sin(t*0.0006);held[1]=0.5+0.45*Math.sin(t*0.0005+1.7);held[2]=0.5+0.45*Math.sin(t*0.0007+3.1);
+      ['f0','f1','f2'].forEach(function(id,n){document.getElementById(id).value=held[n];document.getElementById('v'+n).textContent=held[n].toFixed(2);});
+      render();raf=requestAnimationFrame(loop);
+    }
+    drift.addEventListener('change',function(){if(drift.checked){raf=requestAnimationFrame(loop);}else if(raf){cancelAnimationFrame(raf);raf=null;}});
+    build(3774);render();
   })();
 </script>
 </body>
