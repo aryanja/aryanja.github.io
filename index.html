@@ -389,21 +389,50 @@ const FILES = [
 {
   id:'udp-chat', name:'udp_chat.c', ic:'c', icon:'C', lang:'C', dir:'projects',
   lines: project({
-    title:'Multithreaded UDP Chat',
-    stack:'C · POSIX threads · sockets',
-    role:'Imperial coursework',
+    title:'Multithreaded UDP Chat Server',
+    stack:'C · POSIX threads · UDP sockets · ncurses',
+    role:'Software Systems coursework (OS &amp; Networks)',
     what:[
-      `A concurrent chat server and client over UDP.`
+      `A chat server and terminal client over UDP. Clients join with conn$, then broadcast (say$), message privately (sayto$), rename, mute/unmute others and disconnect. An admin client can kick users.`
     ],
     part:[
-      `Threaded clients and server with reader-writer locks.`,
-      `Private messaging and removal of inactive clients.`,
+      `Server spawns a detached pthread per incoming datagram, so one slow request never blocks the listener.`,
+      `Client list behind a pthread rwlock: lookups and broadcasts share it, joins, renames and removals take it exclusively.`,
+      `Per-client mute lists, applied at broadcast time so muted senders never reach you.`,
+      `Ring buffer of the last 15 messages, replayed to every new client on connect.`,
+      `Liveness monitor: a min-heap of last-activity times. A background thread pops the least-recently-active client, pings it after 15 s idle and drops it if there's no reply within 10 s. Stale heap entries are skipped lazily instead of being updated in place.`,
+      `ncurses client with separate chat and input windows, and sender/listener threads sharing a UI lock.`,
     ],
     results:{
-      transport:'UDP',
-      concurrency:'pthreads, rwlocks',
+      commands:'conn, say, sayto, rename, mute, unmute, kick, disconn',
+      concurrency:'thread per request, rwlock + mutexes',
+      inactivity:'min-heap, ping after 15 s, drop after 10 s',
+      size:'~1,400 lines of C',
     },
     links:[]
+  })
+},
+{
+  id:'shell', name:'s3_shell.c', ic:'c', icon:'C', lang:'C', dir:'projects',
+  lines: project({
+    title:'Unix Shell',
+    stack:'C · fork/exec · pipes · POSIX',
+    role:'Software Systems coursework, pair project',
+    what:[
+      `A Unix shell written from scratch on top of fork, exec, dup2 and pipe.`
+    ],
+    part:[
+      `Pipelines of any length (a | b | c), each stage wired with pipe and dup2.`,
+      `Redirection with <, > and >>, including inside pipelines.`,
+      `Command batches with ;, background jobs with &amp;, and subshells in parentheses.`,
+      `Built-in cd with cd - and ~, plus wildcard expansion via glob.`,
+    ],
+    results:{
+      features:'pipes, redirection, subshells, ;, &amp;, globbing, cd',
+    },
+    links:[
+      ['https://github.com/Adi-111111/Software-Systems-Shell-Implementation','github.com/Adi-111111/Software-Systems-Shell-Implementation'],
+    ]
   })
 },
 {
