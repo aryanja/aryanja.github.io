@@ -1,538 +1,561 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Aryan Jain — Electronic & Information Engineering</title>
-<meta name="description" content="Aryan Jain — Electronic & Information Engineering student at Imperial College London. I build at the line where software meets silicon: FPGA, RTL and embedded systems." />
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aryan Jain · Hardware Engineer</title>
+<meta name="description" content="Aryan Jain. MEng Electronic and Information Engineering at Imperial College London. FPGA, RTL and CPU microarchitecture.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+:root{
+  --bg:#0e1013; --side:#121418; --bar:#0b0d10; --line:#1f232a; --hover:#1a1e25; --sel:#1d2633;
+  --text:#c8ccd4; --dim:#6b7380; --faint:#3a404b;
+  --accent:#7aa2f7; --stfg:#0b0d10; --kw:#c49bf0; --str:#9ece6a; --num:#ff9e64; --prop:#7dcfff; --com:#565f6e; --head:#7aa2f7;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: light){
   :root{
-    /* palette: monochrome zinc + single blue accent (portfolio/personal) */
-    --paper:#FAFAFA; --panel:#FFFFFF; --panel-2:#F4F4F5;
-    --ink:#18181B; --ink-2:#09090B; --muted:#64748B; --hairline:#E4E4E7; --hairline-2:#D4D8DF;
-    --accent:#2563EB; --accent-ink:#1D4FD7;
-    --display:'Space Grotesk',system-ui,sans-serif;
-    --body:'IBM Plex Sans',system-ui,sans-serif;
-    --mono:'IBM Plex Mono',ui-monospace,monospace;
-    --maxw:1080px; --gut:clamp(20px,5vw,56px); --r:2px;
+    --bg:#fbfbfa; --side:#f3f3f1; --bar:#ebebe8; --line:#e2e2de; --hover:#e9e9e5; --sel:#dde6f5;
+    --text:#2b2f36; --dim:#7a808a; --faint:#c3c6cb;
+    --accent:#2f5fd0; --stfg:#fff; --kw:#8a3fc7; --str:#3f7d1c; --num:#b5520f; --prop:#0b7285; --com:#9aa0a8; --head:#2f5fd0;
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  a{color:inherit}
-  ::selection{background:var(--accent);color:#fff}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font:13.5px/1.65 var(--mono);-webkit-font-smoothing:antialiased;overflow:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--sel)}
 
-  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-    background-image:linear-gradient(var(--hairline) 1px,transparent 1px),linear-gradient(90deg,var(--hairline) 1px,transparent 1px);
-    background-size:48px 48px;opacity:.4;
-    -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000 30%,transparent 80%);mask-image:radial-gradient(120% 90% at 50% 0%,#000 30%,transparent 80%)}
+.app{display:grid;grid-template-rows:34px 1fr 24px;height:100vh;height:100dvh}
 
-  .wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+/* title bar */
+.title{display:flex;align-items:center;gap:12px;padding:0 12px;background:var(--bar);border-bottom:1px solid var(--line);color:var(--dim);font-size:12px;user-select:none}
+.dots{display:flex;gap:7px}
+.dots i{width:11px;height:11px;border-radius:50%;background:var(--faint);display:block}
+.title .name{flex:1;text-align:center}
+.title .name b{color:var(--text);font-weight:500}
+.menu-btn{display:none;padding:2px 8px;border:1px solid var(--line);border-radius:4px}
+.search-btn{padding:2px 10px;border:1px solid var(--line);border-radius:4px;color:var(--dim)}
+.search-btn:hover,.menu-btn:hover{color:var(--text);border-color:var(--faint)}
 
-  header.bar{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(8px);background:color-mix(in srgb,var(--paper) 82%,transparent);border-bottom:1px solid var(--hairline)}
-  .bar-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .mark{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted)}
-  .mark b{color:var(--ink);font-weight:500}
-  nav.links{display:flex;gap:8px;font-family:var(--mono);font-size:13px}
-  nav.links a{color:var(--muted);text-decoration:none;position:relative;padding:10px 8px;min-height:44px;display:inline-flex;align-items:center;transition:color .2s ease}
-  nav.links a:hover{color:var(--ink)}
-  nav.links a::after{content:"";position:absolute;left:8px;right:100%;bottom:6px;height:1px;background:var(--accent);transition:right .25s ease}
-  nav.links a:hover::after,nav.links a.active::after{right:8px}
-  nav.links a.active{color:var(--ink)}
-  @media(max-width:680px){nav.links{display:none}}
+/* main */
+.main{display:grid;grid-template-columns:260px 1fr;min-height:0}
+.side{background:var(--side);border-right:1px solid var(--line);overflow-y:auto;padding:10px 0;user-select:none}
+.side h2{font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--dim);padding:0 16px 8px;text-transform:uppercase}
+.tree{list-style:none}
+.tree .row{display:flex;align-items:center;gap:8px;width:100%;padding:2px 16px;text-align:left;color:var(--text);white-space:nowrap}
+.tree .row:hover{background:var(--hover)}
+.tree .row.active{background:var(--sel)}
+.tree .dir{color:var(--text)}
+.tree .dir .chev{display:inline-block;width:10px;color:var(--dim);transition:transform .15s}
+.tree .dir.closed .chev{transform:rotate(-90deg)}
+.tree .indent{padding-left:34px}
+.tree .indent2{padding-left:52px}
+.tree .closed + ul{display:none}
+.ic{font-size:9.5px;font-weight:700;width:26px;text-align:center;flex:none;letter-spacing:-.02em}
+.ic.md{color:var(--prop)} .ic.sv{color:var(--kw)} .ic.cpp{color:var(--accent)} .ic.c{color:var(--accent)}
+.ic.json{color:var(--num)} .ic.log{color:var(--str)} .ic.pdf{color:#e06c75} .ic.ext{color:var(--dim)}
+.side .sep{height:1px;background:var(--line);margin:12px 16px}
+.side .outline{padding:0 16px;color:var(--dim);font-size:12px}
+.side .outline a{display:block;text-decoration:none;padding:1px 0}
+.side .outline a:hover{color:var(--text)}
 
-  .hero{position:relative;padding:clamp(72px,13vw,140px) 0 clamp(56px,9vw,96px)}
-  #field{position:absolute;inset:-10% -2% auto -2%;height:118%;width:104%;z-index:0;opacity:.5;
-    -webkit-mask-image:radial-gradient(80% 78% at 38% 42%,#000 18%,transparent 72%);mask-image:radial-gradient(80% 78% at 38% 42%,#000 18%,transparent 72%);filter:blur(2px)}
-  .hero .wrap{position:relative}
-  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
-  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
-  .eyebrow .rev{margin-left:auto;color:var(--accent)}
-  @media(max-width:680px){.eyebrow .rev{margin-left:0}}
-  h1.name{font-family:var(--display);font-weight:700;font-size:clamp(44px,9.5vw,104px);line-height:.96;letter-spacing:-.03em;margin:0 0 22px}
-  .lede{font-size:clamp(19px,2.4vw,24px);line-height:1.45;max-width:32ch;margin:0 0 14px;font-weight:400}
-  .lede b{font-weight:600}
-  .sub{color:var(--muted);max-width:56ch;margin:0 0 36px}
-  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
-  .btn{font-family:var(--mono);font-size:14px;text-decoration:none;padding:13px 22px;min-height:44px;border:1px solid var(--ink);border-radius:var(--r);display:inline-flex;align-items:center;gap:9px;transition:transform .15s ease,background .2s ease,color .2s ease,border-color .2s ease}
-  .btn.primary{background:var(--ink);color:var(--paper)}
-  .btn.primary:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
-  .btn.ghost:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
-  .btn .arr{transition:transform .2s ease}
-  .btn:hover .arr{transform:translate(3px,-3px)}
+.editor{display:grid;grid-template-rows:35px 26px 1fr;min-width:0;min-height:0}
+.tabs{display:flex;background:var(--side);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;gap:6px;padding:0 6px 0 12px;border-right:1px solid var(--line);color:var(--dim);white-space:nowrap;font-size:12.5px;position:relative}
+.tab.active{background:var(--bg);color:var(--text)}
+.tab.active::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--accent)}
+.tab .x{width:18px;height:18px;border-radius:3px;color:var(--dim);opacity:0;line-height:18px;text-align:center}
+.tab:hover .x,.tab.active .x{opacity:1}
+.tab .x:hover{background:var(--hover);color:var(--text)}
+.crumbs{padding:0 18px;color:var(--dim);font-size:12px;display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden}
+.crumbs b{color:var(--text);font-weight:400}
 
-  section{position:relative;padding:clamp(56px,9vw,104px) 0;border-top:1px solid var(--hairline)}
-  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:44px}
-  .sec-tag{font-family:var(--mono);font-size:12.5px;color:var(--accent);letter-spacing:.08em}
-  h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;margin:0;line-height:1.05}
+.code{overflow:auto;padding:4px 0 80px;counter-reset:ln}
+.l{display:grid;grid-template-columns:56px minmax(0,1fr);min-height:1.65em;counter-increment:ln}
+.l::before{content:counter(ln);color:var(--faint);text-align:right;padding-right:22px;user-select:none;font-size:12px;line-height:inherit}
+.l > span.t{white-space:pre-wrap;word-break:break-word;max-width:86ch;padding-right:24px}
+.l:hover::before{color:var(--dim)}
+.l.p > span.t{color:var(--text)}
+.c{color:var(--com)} .k{color:var(--kw)} .s{color:var(--str)} .n{color:var(--num)} .pr{color:var(--prop)} .h{color:var(--head);font-weight:700} .d{color:var(--dim)}
+.h1{font-size:1.5em;line-height:1.4}
+.logd{display:block;padding-left:28ch;color:var(--dim)}
+.code a{color:var(--str);text-decoration:none;border-bottom:1px dotted currentColor}
+.code a:hover{border-bottom-style:solid}
+.cursor{display:inline-block;width:.6em;height:1.15em;vertical-align:-.2em;background:var(--accent);animation:blink 1.1s steps(1) infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+.embed{position:relative;width:min(560px,100%);aspect-ratio:16/9;margin:6px 0;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--side)}
+.embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.empty{display:grid;place-items:center;height:100%;color:var(--dim);text-align:center;line-height:2.2}
+.empty kbd{border:1px solid var(--line);border-radius:3px;padding:1px 6px;font:inherit;color:var(--text)}
 
-  .about-grid{display:grid;grid-template-columns:1.3fr .9fr;gap:clamp(28px,5vw,64px);align-items:start}
-  @media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:34px}}
-  .about-grid p{margin:0 0 18px;font-size:18px;max-width:64ch}
-  .about-grid p:last-child{margin-bottom:0}
-  .specs{border:1px solid var(--hairline);background:var(--panel);border-radius:var(--r);overflow:hidden}
-  .spec-row{display:flex;justify-content:space-between;gap:18px;padding:14px 18px;border-bottom:1px solid var(--hairline);font-family:var(--mono);font-size:13px}
-  .spec-row:last-child{border-bottom:0}
-  .spec-row .k{color:var(--muted);letter-spacing:.04em}
-  .spec-row .v{color:var(--ink);text-align:right;font-weight:500}
+/* status bar */
+.status{display:flex;align-items:center;gap:16px;padding:0 12px;background:var(--accent);color:var(--stfg);font-size:11.5px;white-space:nowrap;overflow:hidden;user-select:none}
+.status .grow{flex:1}
+.status a{text-decoration:none}
+.status .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#1f7a3a;margin-right:6px;vertical-align:0}
 
-  .xp{border-top:1px solid var(--hairline)}
-  .xp-row{display:grid;grid-template-columns:170px 1fr;gap:clamp(16px,4vw,48px);padding:28px 0;border-bottom:1px solid var(--hairline);align-items:start}
-  @media(max-width:680px){.xp-row{grid-template-columns:1fr;gap:8px;padding:24px 0}}
-  .xp-when{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.04em;padding-top:5px}
-  .xp h3{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.01em;margin:0 0 2px;line-height:1.2}
-  .xp .org{font-family:var(--mono);font-size:13px;color:var(--accent);margin-bottom:12px}
-  .xp p{margin:0;color:#27272A;max-width:62ch;font-size:16px}
+/* quick open */
+.qo{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;justify-content:center;align-items:flex-start;padding-top:12vh;z-index:10}
+.qo.open{display:flex}
+.qo-box{width:min(520px,92vw);background:var(--side);border:1px solid var(--line);border-radius:6px;box-shadow:0 18px 50px rgba(0,0,0,.35);overflow:hidden}
+.qo input{width:100%;padding:12px 14px;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--text);font:inherit;outline:none}
+.qo ul{list-style:none;max-height:50vh;overflow:auto;padding:4px 0}
+.qo li{display:flex;gap:10px;align-items:center;padding:5px 14px;cursor:pointer}
+.qo li .d{margin-left:auto;font-size:12px}
+.qo li.on{background:var(--sel)}
 
-  .proj{border:1px solid var(--hairline);background:var(--panel);border-radius:var(--r);overflow:hidden;margin-bottom:26px;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
-  .proj:hover{transform:translateY(-3px);border-color:var(--hairline-2);box-shadow:0 10px 34px -16px rgba(16,20,30,.22)}
-  .proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:clamp(22px,3.5vw,34px) clamp(22px,3.5vw,34px) 0}
-  .proj-id{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em}
-  .proj h3{font-family:var(--display);font-weight:600;font-size:clamp(20px,3vw,27px);letter-spacing:-.01em;margin:8px 0 0;line-height:1.14}
-  .proj .role{font-family:var(--mono);font-size:12.5px;color:var(--accent);white-space:nowrap;padding-top:4px;text-align:right}
-  .proj-body{padding:18px clamp(22px,3.5vw,34px) clamp(22px,3.5vw,34px)}
-  .proj-body>p{margin:0 0 22px;max-width:64ch;color:#27272A}
-  .datatable{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));border-top:1px solid var(--hairline);border-left:1px solid var(--hairline)}
-  .cell{border-right:1px solid var(--hairline);border-bottom:1px solid var(--hairline);padding:12px 14px;background:var(--panel-2)}
-  .cell .ck{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
-  .cell .cv{font-family:var(--mono);font-size:14px;font-weight:500}
-  .cell .cv em{font-style:normal;color:var(--accent)}
-  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-  .tag{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--hairline);border-radius:var(--r);padding:5px 10px}
-  .proj-links{display:flex;gap:18px;margin-top:24px;font-family:var(--mono);font-size:13px;flex-wrap:wrap}
-  .proj-links a{color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:32px}
-  .proj-links a:hover{color:var(--accent-ink);text-decoration:underline}
-
-  .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,36px)}
-  @media(max-width:760px){.skills{grid-template-columns:1fr}}
-  .skill-col h4{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 16px;font-weight:500}
-  .skill-col ul{list-style:none;margin:0;padding:0}
-  .skill-col li{padding:9px 0;border-bottom:1px solid var(--hairline);font-size:15.5px;display:flex;align-items:center;gap:10px}
-  .skill-col li::before{content:"";width:5px;height:5px;background:var(--accent);flex:none;transform:rotate(45deg)}
-  .skill-col li:last-child{border-bottom:0}
-
-  .contact .wrap{text-align:center}
-  .contact h2{margin-bottom:14px}
-  .contact>.wrap>p{color:var(--muted);max-width:46ch;margin:0 auto 34px}
-  .contact-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-
-  footer{border-top:1px solid var(--hairline);padding:30px 0}
-  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted)}
-
-  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r)}
-
-  /* scroll-reveal (JS-gated; only added when motion is allowed) */
-  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1)}
-  .reveal.is-in{opacity:1;transform:none}
-
-  /* hero load-in only when motion is allowed */
-  @media(prefers-reduced-motion:no-preference){
-    .hero .eyebrow,.hero h1,.hero .lede,.hero .sub,.hero .cta-row{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
-    .hero h1{animation-delay:.06s}.hero .lede{animation-delay:.14s}.hero .sub{animation-delay:.2s}.hero .cta-row{animation-delay:.26s}
-    @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-  }
-  @media(prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}
-    .btn,.btn .arr,nav.links a,nav.links a::after,.proj{transition:none}
-    .proj:hover{transform:none}
-  }
-  /* interactive demo */
-  #demo .demo-lede{color:var(--muted);max-width:62ch;margin:-20px 0 34px;font-size:17px}
-  .demo-grid{display:grid;grid-template-columns:1.6fr .9fr;gap:clamp(20px,3vw,40px);align-items:start}
-  @media(max-width:760px){.demo-grid{grid-template-columns:1fr}}
-  .demo-stage{position:relative;border:1px solid var(--hairline);border-radius:var(--r);overflow:hidden;background:#0b0d12;aspect-ratio:4/3}
-  #boundary{display:block;width:100%;height:100%}
-  .probe{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:#fff;background:rgba(10,12,16,.55);backdrop-filter:blur(4px);padding:6px 9px;border-radius:var(--r);pointer-events:none;opacity:.0;transition:opacity .15s ease;white-space:nowrap}
-  .demo-stage:hover .probe{opacity:1}
-  .demo-controls{display:flex;flex-direction:column;gap:18px}
-  .ctrl label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:9px}
-  .ctrl label .val{color:var(--accent)}
-  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:var(--hairline-2);border-radius:2px;outline:none;cursor:pointer}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
-  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;cursor:pointer}
-  .demo-btns{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:2px}
-  .demo-btn{font-family:var(--mono);font-size:13px;padding:10px 16px;min-height:44px;border:1px solid var(--ink);background:var(--panel);border-radius:var(--r);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s ease,color .2s ease,transform .15s ease}
-  .demo-btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
-  .anim-toggle{font-family:var(--mono);font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
-  .anim-toggle input{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
-  .demo-legend{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;margin-top:4px}
-  .demo-legend span{display:inline-flex;align-items:center;gap:7px}
-  .demo-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+@media (max-width:760px){
+  body{font-size:13px}
+  .main{grid-template-columns:1fr}
+  .side{position:fixed;top:34px;bottom:24px;left:0;width:260px;z-index:5;transform:translateX(-100%);transition:transform .2s;box-shadow:8px 0 30px rgba(0,0,0,.25)}
+  .side.open{transform:none}
+  .menu-btn{display:block}
+  .title .name{text-align:left}
+  .dots{display:none}
+  .l{grid-template-columns:38px minmax(0,1fr)}
+  .l::before{padding-right:12px;font-size:11px}
+  .status .hide-sm{display:none}
+  .logd{padding-left:2ch}
+}
+@media (prefers-reduced-motion:reduce){.cursor{animation:none}}
 </style>
 </head>
 <body>
+<div class="app">
+  <header class="title">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle file explorer">files</button>
+    <div class="name"><b>aryan-jain</b> · portfolio</div>
+    <button class="search-btn" id="searchBtn" aria-label="Quick open">⌘P</button>
+  </header>
 
-<header class="bar">
-  <div class="wrap bar-inner">
-    <span class="mark"><b>AJ</b> — EIE / Imperial</span>
-    <nav class="links">
-      <a href="#demo">demo</a>
-      <a href="#about">about</a>
-      <a href="#experience">experience</a>
-      <a href="#work">work</a>
-      <a href="#skills">skills</a>
-      <a href="#contact">contact</a>
+  <div class="main">
+    <nav class="side" id="side" aria-label="File explorer">
+      <h2>Explorer</h2>
+      <ul class="tree" id="tree"></ul>
+      <div class="sep"></div>
+      <h2>Elsewhere</h2>
+      <div class="outline">
+        <a href="https://github.com/aryanja" target="_blank" rel="noopener">github ↗</a>
+        <a href="https://www.linkedin.com/in/aryanjain31031014" target="_blank" rel="noopener">linkedin ↗</a>
+        <a href="mailto:aryan.jain22@imperial.ac.uk">email ↗</a>
+      </div>
     </nav>
+
+    <main class="editor">
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div class="crumbs" id="crumbs"></div>
+      <div class="code" id="code" tabindex="0"></div>
+    </main>
   </div>
-</header>
 
-<main>
-  <section class="hero" aria-label="Intro">
-    <canvas id="field" aria-hidden="true"></canvas>
-    <div class="wrap">
-      <div class="eyebrow">
-        <span class="dot"></span><span>Electronic &amp; Information Engineering</span>
-        <span>·</span><span>Imperial College London</span>
-        <span class="rev">REV·2026</span>
-      </div>
-      <h1 class="name">Aryan<br>Jain</h1>
-      <p class="lede">I build at the line where <b>software meets silicon</b> — turning algorithms into real-time logic on hardware.</p>
-      <p class="sub">Engineering student working in SystemVerilog, C and Python, with a soft spot for FPGAs, processor microarchitecture, and getting things to run in real time on a chip rather than a CPU. Previously interned at Accenture and Optiver, and led a 60-person platoon in the Singapore Armed Forces.</p>
-      <div class="cta-row">
-        <a class="btn primary" href="#work">View work <span class="arr">↗</span></a>
-        <a class="btn ghost" href="Aryan_Resume.pdf" target="_blank" rel="noopener">Download CV <span class="arr">↗</span></a>
-      </div>
-    </div>
-  </section>
+  <footer class="status">
+    <span>⎇ main</span>
+    <span><span class="dot"></span>open to 2027 internships</span>
+    <span class="grow"></span>
+    <span class="hide-sm" id="stLines"></span>
+    <span class="hide-sm">UTF-8</span>
+    <span id="stLang"></span>
+  </footer>
+</div>
 
-  <section id="demo" aria-label="Interactive decision-boundary demo">
-    <div class="wrap">
-      <div class="sec-head"><span class="sec-tag">LIVE</span><h2>Try it yourself</h2></div>
-      <p class="demo-lede">Below is a tiny neural network running live in your browser — the same idea as my FPGA project. Drag the sliders to change its inputs and watch the decision boundary redraw in real time. Hover the image to probe any point. (On the actual board this renders 640×480 to a monitor at ~20&nbsp;fps in hardware; here it's just JavaScript, but the concept is identical.)</p>
-      <div class="demo-grid">
-        <div class="demo-stage">
-          <canvas id="boundary" width="144" height="108" aria-label="Live neural network decision boundary"></canvas>
-          <div class="probe" id="probe">hover to probe</div>
-        </div>
-        <div class="demo-controls">
-          <div class="ctrl"><label for="f0">Feature 1 <span class="val" id="v0">0.50</span></label><input type="range" id="f0" min="0" max="1" step="0.01" value="0.5"></div>
-          <div class="ctrl"><label for="f1">Feature 2 <span class="val" id="v1">0.50</span></label><input type="range" id="f1" min="0" max="1" step="0.01" value="0.5"></div>
-          <div class="ctrl"><label for="f2">Feature 3 <span class="val" id="v2">0.50</span></label><input type="range" id="f2" min="0" max="1" step="0.01" value="0.5"></div>
-          <div class="demo-btns">
-            <button class="demo-btn" id="reroll" type="button">↻ New network</button>
-            <label class="anim-toggle"><input type="checkbox" id="drift"> auto-drift</label>
-          </div>
-          <div class="demo-legend">
-            <span><i style="background:#d05a5a"></i>class A → red</span>
-            <span><i style="background:#5aa06a"></i>class B → green</span>
-            <span><i style="background:#5a78d0"></i>class C → blue</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="about" aria-label="About">
-    <div class="wrap">
-      <div class="sec-head"><span class="sec-tag">01</span><h2>About</h2></div>
-      <div class="about-grid">
-        <div>
-          <p>I'm an MEng Electronic &amp; Information Engineering student at Imperial College London. Most of my interest sits at the boundary between software and hardware: register-transfer-level design, processor microarchitecture, embedded systems, and accelerating real workloads on FPGAs.</p>
-          <p>I like problems where the constraint <em>is</em> the design — a fixed clock, limited DSP slices, a video frame that has to be ready before the next pixel-clock edge. Recently that's meant building a fully pipelined neural network on a PYNQ-Z1 that renders a classifier's decision boundary in real time, about 40× faster than the CPU doing the same maths.</p>
-          <p>Alongside the engineering, I've spent time in very different rooms — backend development at Accenture, a trading academy at Optiver, and leadership in the Singapore Armed Forces. Currently open to internship opportunities in hardware, FPGA and embedded engineering.</p>
-        </div>
-        <div class="specs" aria-label="Quick facts">
-          <div class="spec-row"><span class="k">DEGREE</span><span class="v">MEng EIE</span></div>
-          <div class="spec-row"><span class="k">UNIVERSITY</span><span class="v">Imperial College London</span></div>
-          <div class="spec-row"><span class="k">YEARS</span><span class="v">2024 — 2028</span></div>
-          <div class="spec-row"><span class="k">IB</span><span class="v">41 / 42 · UWCSEA</span></div>
-          <div class="spec-row"><span class="k">LOCATION</span><span class="v">London, UK</span></div>
-          <div class="spec-row"><span class="k">STATUS</span><span class="v">Open to internships</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="experience" aria-label="Experience">
-    <div class="wrap">
-      <div class="sec-head"><span class="sec-tag">02</span><h2>Experience</h2></div>
-      <div class="xp">
-        <div class="xp-row">
-          <div class="xp-when">JUL — SEP 2025</div>
-          <div>
-            <h3>Software Development Intern</h3>
-            <div class="org">Accenture · Singapore</div>
-            <p>Built backend workflow automation in C# with validation and preprocessing layers. Shipped a cross-platform data slicer adopted by 60+ colleagues that cut daily manual processing by 40%, plus a Mermaid-based message-flow visualiser that let 100+ developers trace system-level interactions. Worked with QA to clear SIT/UAT blockers and improve release stability.</p>
-          </div>
-        </div>
-        <div class="xp-row">
-          <div class="xp-when">MAY — JUN 2025</div>
-          <div>
-            <h3>Trading Intern</h3>
-            <div class="org">Optiver · Imperial Trading Academy · London</div>
-            <p>Intensive training in options, derivatives pricing, market-making and execution algorithms. Ranked in the top tier for decision quality and PnL stability across competitive trading simulations.</p>
-          </div>
-        </div>
-        <div class="xp-row">
-          <div class="xp-when">2022 — 2024</div>
-          <div>
-            <h3>Platoon Sergeant, Guards Formation</h3>
-            <div class="org">Singapore Armed Forces · Singapore</div>
-            <p>Led and trained a 60-person platoon in advanced infantry tactics and physical conditioning, and coordinated mission planning and safety oversight for high-intensity field exercises. Awarded the Commander's Coin and a Certificate of Recognition for leadership.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="work" aria-label="Selected work">
-    <div class="wrap">
-      <div class="sec-head"><span class="sec-tag">03</span><h2>Selected work</h2></div>
-
-      <article class="proj">
-        <div class="proj-top">
-          <div><span class="proj-id">PROJ·01</span><h3>Hardware-Accelerated Neural Network Decision Visualiser</h3></div>
-          <span class="role">RTL / hardware accelerator</span>
-        </div>
-        <div class="proj-body">
-          <p>A fully pipelined 16→64→32→3 MLP built in SystemVerilog on a PYNQ-Z1, running one complete neural-network forward pass <em>per pixel</em> to render a classifier's decision boundary as a live colour heatmap — 640×480 streamed to HDMI at roughly 20 fps. That's about 40× faster than an equivalent C++/SDL2 CPU baseline (and, by estimate, ~730× more energy-efficient), saturating all 220 DSP slices on the chip. The same hardware retargets any tabular dataset of up to 16 features at runtime; demoed on Iris and the 16-feature Dry Bean set. I led the core HDL datapath with one teammate — the multiply-accumulate units, the three-layer pipeline, weight RAM, and the output FIFO.</p>
-          <div class="datatable">
-            <div class="cell"><span class="ck">Target</span><span class="cv">PYNQ-Z1 · Zynq-7000</span></div>
-            <div class="cell"><span class="ck">Network</span><span class="cv">16→64→32→3 MLP</span></div>
-            <div class="cell"><span class="ck">Throughput</span><span class="cv">640×480 @ <em>~20 fps</em></span></div>
-            <div class="cell"><span class="ck">vs CPU</span><span class="cv"><em>~40×</em> faster</span></div>
-            <div class="cell"><span class="ck">DSP usage</span><span class="cv"><em>220</em> / 220 · 100%</span></div>
-            <div class="cell"><span class="ck">Arithmetic</span><span class="cv">Q1.15 · Q4.4 fixed-point</span></div>
-          </div>
-          <div class="tags">
-            <span class="tag">SystemVerilog</span><span class="tag">Vivado</span><span class="tag">PYNQ-Z1</span>
-            <span class="tag">DSP / MAC pipeline</span><span class="tag">AXI-Stream / AXI-Lite</span>
-            <span class="tag">Fixed-point</span><span class="tag">HDMI video</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://github.com/Adi-111111/Snytax-Error" target="_blank" rel="noopener">GitHub ↗</a>
-            <a href="Design_Project_Summer__26-4.pdf" target="_blank" rel="noopener">Report (PDF) ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="proj">
-        <div class="proj-top">
-          <div><span class="proj-id">PROJ·02</span><h3>Gesture-Controlled Collaborative Whiteboard</h3></div>
-          <span class="role">FPGA · ML · cloud</span>
-        </div>
-        <div class="proj-body">
-          <p>A real-time, multi-user whiteboard you draw on with hand gestures in the air. Webcam frames are turned into hand landmarks, classified by a neural network accelerated on a PYNQ-Z1 FPGA to keep latency low, and the resulting strokes sync live across clients through a cloud-hosted server. The result feels instant despite the heavy vision pipeline behind it.</p>
-          <div class="datatable">
-            <div class="cell"><span class="ck">Accelerator</span><span class="cv">PYNQ-Z1 FPGA</span></div>
-            <div class="cell"><span class="ck">Model</span><span class="cv">MLP gesture classifier</span></div>
-            <div class="cell"><span class="ck">Vision</span><span class="cv">MediaPipe · OpenCV</span></div>
-            <div class="cell"><span class="ck">Sync</span><span class="cv">Flask · Socket.IO</span></div>
-            <div class="cell"><span class="ck">Cloud</span><span class="cv">AWS EC2</span></div>
-            <div class="cell"><span class="ck">Latency</span><span class="cv"><em>real-time</em> multi-user</span></div>
-          </div>
-          <div class="tags">
-            <span class="tag">PYNQ-Z1</span><span class="tag">PyTorch</span><span class="tag">Python</span>
-            <span class="tag">MediaPipe</span><span class="tag">Flask / Socket.IO</span><span class="tag">AWS</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://github.com/Adi-111111/Info-Proc-CW" target="_blank" rel="noopener">GitHub ↗</a>
-            <a href="https://youtu.be/ka_kZNjIJMg" target="_blank" rel="noopener">Demo video ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="proj">
-        <div class="proj-top">
-          <div><span class="proj-id">PROJ·03</span><h3>5-Stage Pipelined RISC-V CPU + Data Cache</h3></div>
-          <span class="role">RTL / microarchitecture</span>
-        </div>
-        <div class="proj-body">
-          <p>An RV32I processor built from scratch in SystemVerilog: a full five-stage pipeline with forwarding, load-use stalls, and branch/jump flushing, paired with a 2-way set-associative write-back data cache (LRU, multi-cycle miss handling). Validated with custom Verilator testbenches, including a Gaussian-histogram workload built specifically to stress hazards and cache behaviour. The team also pushed into superscalar and branch-prediction variants.</p>
-          <div class="tags">
-            <span class="tag">SystemVerilog</span><span class="tag">Verilator</span><span class="tag">RV32I</span>
-            <span class="tag">Pipelining</span><span class="tag">Caches</span><span class="tag">Hazard handling</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://github.com/shivamsangani/IAC-Project-Team15" target="_blank" rel="noopener">GitHub ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="proj">
-        <div class="proj-top">
-          <div><span class="proj-id">PROJ·04</span><h3>C Compiler</h3></div>
-          <span class="role">compilers / low-level</span>
-        </div>
-        <div class="proj-body">
-          <p>A compiler that translates a subset of C into RISC-V assembly — lexing, parsing, and code generation with correct handling of the things that actually bite: function calls and the calling convention, control flow, scope, and the stack frame. Built for Imperial's Language Processors coursework. <!-- VERIFY: I couldn't read this repo (it may be private) — tweak this description to match exactly what you built. --></p>
-          <div class="tags">
-            <span class="tag">Compilers</span><span class="tag">RISC-V</span><span class="tag">Lexing / parsing</span>
-            <span class="tag">Code generation</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://github.com/LangProc/langproc-2025-cw-NairJain" target="_blank" rel="noopener">GitHub ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="proj">
-        <div class="proj-top">
-          <div><span class="proj-id">PROJ·05</span><h3>Multithreaded UDP Chat System</h3></div>
-          <span class="role">systems / concurrency</span>
-        </div>
-        <div class="proj-body">
-          <p>A concurrent UDP client–server chat written in C. Each client runs dedicated sender and listener threads while the server spawns a thread per packet, all coordinated through a thread-safe client registry using reader–writer locks. Supports broadcast and private messaging, mute, rename and admin kick, with a 15-message history buffer and a min-heap inactivity-removal engine driven by ping/pong logic.</p>
-          <div class="tags">
-            <span class="tag">C</span><span class="tag">POSIX threads</span><span class="tag">UDP sockets</span>
-            <span class="tag">Reader–writer locks</span><span class="tag">Min-heap</span>
-          </div>
-          <!-- EDIT: add the repo link for this project if you have one -->
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <section id="skills" aria-label="Skills">
-    <div class="wrap">
-      <div class="sec-head"><span class="sec-tag">04</span><h2>Toolbox</h2></div>
-      <div class="skills">
-        <div class="skill-col">
-          <h4>Hardware / RTL</h4>
-          <ul>
-            <li>SystemVerilog</li><li>FPGA — PYNQ / Zynq</li><li>RISC-V microarchitecture</li>
-            <li>Pipelining &amp; caches</li><li>Verilator</li><li>Fixed-point datapaths</li>
-          </ul>
-        </div>
-        <div class="skill-col">
-          <h4>Software / Systems</h4>
-          <ul>
-            <li>C / C++</li><li>Python</li><li>C# · Java · SQL</li>
-            <li>POSIX threads · concurrency</li><li>UDP / sockets</li><li>Bash</li>
-          </ul>
-        </div>
-        <div class="skill-col">
-          <h4>Tools &amp; Cloud</h4>
-          <ul>
-            <li>Git</li><li>AWS (EC2)</li><li>Azure</li>
-            <li>Visual Studio</li><li>MediaPipe / OpenCV</li><li>Fusion 360</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="contact" aria-label="Contact">
-    <div class="wrap">
-      <div class="sec-head" style="justify-content:center"><span class="sec-tag">05</span><h2>Get in touch</h2></div>
-      <p>The fastest way to reach me is email. Happy to talk about hardware, embedded work, or anything in between.</p>
-      <div class="contact-row">
-        <a class="btn primary" href="mailto:aryan.jain22@imperial.ac.uk">Email me <span class="arr">↗</span></a>
-        <a class="btn ghost" href="https://github.com/aryanja" target="_blank" rel="noopener">GitHub <span class="arr">↗</span></a>
-        <a class="btn ghost" href="https://www.linkedin.com/in/aryan-jain-46541821a" target="_blank" rel="noopener">LinkedIn <span class="arr">↗</span></a>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <span>© <span id="yr"></span> Aryan Jain</span>
-    <span>Built from scratch · hand-coded HTML</span>
+<div class="qo" id="qo" role="dialog" aria-label="Quick open">
+  <div class="qo-box">
+    <input id="qoInput" placeholder="Go to file..." autocomplete="off" spellcheck="false">
+    <ul id="qoList"></ul>
   </div>
-</footer>
+</div>
 
 <script>
-  document.getElementById('yr').textContent = new Date().getFullYear();
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ---------- tiny syntax helpers ---------- */
+const c  = t => `<span class="c">${t}</span>`;
+const k  = t => `<span class="k">${t}</span>`;
+const s  = t => `<span class="s">${t}</span>`;
+const n  = t => `<span class="n">${t}</span>`;
+const pr = t => `<span class="pr">${t}</span>`;
+const d  = t => `<span class="d">${t}</span>`;
+const a  = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${text || href.replace(/^https?:\/\/(www\.)?/,'')}</a>`;
+const P  = t => ({p:true, t});            // prose line
+const B  = '';                            // blank line
 
-  /* Hero: slow neural decision-boundary field (nods to the FPGA gesture classifier) */
-  (function(){
-    var cv = document.getElementById('field'); if(!cv) return;
-    var ctx = cv.getContext('2d'); var GW=72, GH=44; cv.width=GW; cv.height=GH;
-    var p=[{x:.26,y:.34,c:[208,90,90]},{x:.70,y:.30,c:[90,160,106]},{x:.48,y:.74,c:[90,120,208]}];
-    function d2(ax,ay,bx,by){var dx=ax-bx,dy=ay-by;return dx*dx+dy*dy;}
-    function draw(t){
-      p[0].cx=p[0].x+Math.sin(t*0.00013)*0.12;   p[0].cy=p[0].y+Math.cos(t*0.00017)*0.10;
-      p[1].cx=p[1].x+Math.sin(t*0.00011+2)*0.11; p[1].cy=p[1].y+Math.cos(t*0.00015+1)*0.12;
-      p[2].cx=p[2].x+Math.sin(t*0.00016+4)*0.10; p[2].cy=p[2].y+Math.cos(t*0.00012+3)*0.11;
-      var img=ctx.createImageData(GW,GH),a=img.data,i=0;
-      for(var y=0;y<GH;y++)for(var x=0;x<GW;x++){
-        var fx=x/GW,fy=y/GH,w0=1/(5e-4+d2(fx,fy,p[0].cx,p[0].cy)),w1=1/(5e-4+d2(fx,fy,p[1].cx,p[1].cy)),w2=1/(5e-4+d2(fx,fy,p[2].cx,p[2].cy)),s=w0+w1+w2;
-        a[i++]=(p[0].c[0]*w0+p[1].c[0]*w1+p[2].c[0]*w2)/s;
-        a[i++]=(p[0].c[1]*w0+p[1].c[1]*w1+p[2].c[1]*w2)/s;
-        a[i++]=(p[0].c[2]*w0+p[1].c[2]*w1+p[2].c[2]*w2)/s; a[i++]=255;
-      }
-      ctx.putImageData(img,0,0);
-    }
-    if(reduce){draw(0);return;}
-    var last=0;(function loop(t){if(t-last>66){draw(t);last=t;}requestAnimationFrame(loop);})(0);
-  })();
-
-  /* Scroll-triggered reveals (only when motion allowed) */
-  if(!reduce && 'IntersectionObserver' in window){
-    var els=document.querySelectorAll('.sec-head,.about-grid>div,.xp-row,.proj,.skill-col,.contact-row');
-    els.forEach(function(el){el.classList.add('reveal');});
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);}});
-    },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
-    els.forEach(function(el){io.observe(el);});
+/* C-family project file template */
+function project({title, stack, role, what, part, results, links, extra}){
+  const L = [];
+  L.push(c('/**'));
+  L.push(c(' * ') + `<span class="h">${title}</span>`);
+  L.push(c(' * ' + stack));
+  L.push(c(' * ' + role));
+  L.push(c(' */'));
+  L.push(B);
+  L.push(c('// what it is'));
+  what.forEach(t => L.push(P(t)));
+  L.push(B);
+  if (part){
+    L.push(c('// my part'));
+    part.forEach(t => L.push(P(d('- ') + t)));
+    L.push(B);
   }
+  L.push(k('const') + ' results = {');
+  Object.entries(results).forEach(([key,val]) => L.push('  ' + pr(key) + ': ' + s(`"${val}"`) + ','));
+  L.push('};');
+  if (extra) { L.push(B); extra.forEach(x => L.push(x)); }
+  if (links && links.length){
+    L.push(B);
+    links.forEach(([href,label]) => L.push(k('#include') + ' ' + s('&lt;' + a(href,label) + '&gt;')));
+  }
+  return L;
+}
 
-  /* Active-nav scroll-spy */
-  (function(){
-    var links=document.querySelectorAll('nav.links a'); if(!links.length) return;
-    var map={}; links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
-    var spy=new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(e.isIntersecting){links.forEach(function(x){x.classList.remove('active');}); if(map[e.target.id]) map[e.target.id].classList.add('active');}
-      });
-    },{rootMargin:'-45% 0px -50% 0px'});
-    document.querySelectorAll('main section[id]').forEach(function(s){spy.observe(s);});
-  })();
-  /* Interactive in-browser MLP decision-boundary playground */
-  (function(){
-    var cv=document.getElementById('boundary'); if(!cv) return;
-    var ctx=cv.getContext('2d'); var GW=cv.width, GH=cv.height;
-    var IN=5, H=14, W1,b1,W2,b2, held=[0.5,0.5,0.5];
-    var C=[[208,90,90],[90,160,106],[90,120,208]], NAMES=['A','B','C'];
-    function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-    function build(seed){
-      var r=rng(seed); W1=[];b1=[];W2=[];b2=[];
-      for(var i=0;i<H;i++){var row=[];for(var j=0;j<IN;j++)row.push((r()*2-1)*3.0);W1.push(row);b1.push((r()*2-1)*0.6);}
-      for(var o=0;o<3;o++){var r2=[];for(var k=0;k<H;k++)r2.push((r()*2-1)*2.2);W2.push(r2);b2.push((r()*2-1)*0.3);}
-    }
-    function forward(x,y){
-      var inp=[x-0.5,y-0.5,held[0]-0.5,held[1]-0.5,held[2]-0.5], hid=new Array(H), i,j,k,o;
-      for(i=0;i<H;i++){var s=b1[i],w=W1[i];for(j=0;j<IN;j++)s+=w[j]*inp[j];hid[i]=s>0?s:0;}
-      var lo=[b2[0],b2[1],b2[2]];
-      for(o=0;o<3;o++){var w2=W2[o];for(k=0;k<H;k++)lo[o]+=w2[k]*hid[k];}
-      var t=0.6,m=Math.max(lo[0],lo[1],lo[2]),e0=Math.exp((lo[0]-m)/t),e1=Math.exp((lo[1]-m)/t),e2=Math.exp((lo[2]-m)/t),su=e0+e1+e2;
-      return [e0/su,e1/su,e2/su];
-    }
-    function rgb(p){return [p[0]*C[0][0]+p[1]*C[1][0]+p[2]*C[2][0], p[0]*C[0][1]+p[1]*C[1][1]+p[2]*C[2][1], p[0]*C[0][2]+p[1]*C[1][2]+p[2]*C[2][2]];}
-    function render(){
-      var img=ctx.createImageData(GW,GH),d=img.data,idx=0,gx,gy;
-      for(gy=0;gy<GH;gy++)for(gx=0;gx<GW;gx++){var c=rgb(forward(gx/GW,gy/GH));d[idx++]=c[0];d[idx++]=c[1];d[idx++]=c[2];d[idx++]=255;}
-      ctx.putImageData(img,0,0);
-    }
-    var pending=false;
-    function schedule(){if(pending)return;pending=true;requestAnimationFrame(function(){pending=false;render();});}
-    function bind(id,vi,n){var el=document.getElementById(id),v=document.getElementById(vi);el.addEventListener('input',function(){held[n]=parseFloat(el.value);v.textContent=held[n].toFixed(2);schedule();});}
-    bind('f0','v0',0);bind('f1','v1',1);bind('f2','v2',2);
-    document.getElementById('reroll').addEventListener('click',function(){build((Math.random()*1e9)|0);schedule();});
-    var probe=document.getElementById('probe');
-    cv.addEventListener('pointermove',function(e){
-      var rct=cv.getBoundingClientRect(),x=(e.clientX-rct.left)/rct.width,y=(e.clientY-rct.top)/rct.height;
-      if(x<0||x>1||y<0||y>1)return;
-      var p=forward(x,y),c=rgb(p),best=p[0]>=p[1]&&p[0]>=p[2]?0:(p[1]>=p[2]?1:2);
-      probe.textContent='class '+NAMES[best]+'  ·  rgb('+Math.round(c[0])+','+Math.round(c[1])+','+Math.round(c[2])+')';
-    });
-    var drift=document.getElementById('drift'),raf=null;
-    function loop(t){
-      held[0]=0.5+0.45*Math.sin(t*0.0006);held[1]=0.5+0.45*Math.sin(t*0.0005+1.7);held[2]=0.5+0.45*Math.sin(t*0.0007+3.1);
-      ['f0','f1','f2'].forEach(function(id,n){document.getElementById(id).value=held[n];document.getElementById('v'+n).textContent=held[n].toFixed(2);});
-      render();raf=requestAnimationFrame(loop);
-    }
-    drift.addEventListener('change',function(){if(drift.checked){raf=requestAnimationFrame(loop);}else if(raf){cancelAnimationFrame(raf);raf=null;}});
-    build(3774);render();
-  })();
+/* ---------- content ---------- */
+const FILES = [
+{
+  id:'readme', name:'README.md', ic:'md', icon:'M↓', lang:'Markdown', dir:null,
+  lines:[
+    `<span class="h h1"><span class="d"># </span>Aryan Jain</span><span class="cursor"></span>`,
+    B,
+    P(`MEng Electronic &amp; Information Engineering, Imperial College London (2024–2028).`),
+    P(`I design hardware: RTL, FPGA accelerators and CPU microarchitecture. Most recently I built a hardware prefetcher for an ARM server core at Huawei's UK research lab.`),
+    B,
+    `<span class="h"><span class="d">## </span>now</span>`,
+    P(d('- ') + `Year 3: Custom Computing, Advanced Computer Architecture, Machine Learning, Deep Learning`),
+    P(d('- ') + `FPGA engineer on the exchange team at Queen's Tower Exchange, Imperial`),
+    P(d('- ') + `Looking for 2027 internships and placements in hardware, FPGA and computer architecture`),
+    B,
+    `<span class="h"><span class="d">## </span>background</span>`,
+    P(d('- ') + `First Class Honours in Years 1 and 2, top 15% of the cohort in Year 2`),
+    P(d('- ') + `From Singapore. Two years as a Platoon Sergeant in the Singapore Armed Forces, leading 60 people`),
+    P(d('- ') + `Optiver Imperial Trading Academy, 2025. VP of the Electrical Engineering Society`),
+    B,
+    `<span class="h"><span class="d">## </span>stack</span>`,
+    pr('hardware') + '  ' + s('SystemVerilog, Verilog, AXI, Vivado, Verilator'),
+    pr('software') + '  ' + s('C++, C, Python, C#, SQL, Bash'),
+    pr('sim     ') + '  ' + s('gem5, SPEC CPU2017, GoogleTest'),
+    B,
+    c('&lt;!-- start with projects/tlb_prefetcher.cpp, or press ⌘P --&gt;'),
+  ]
+},
+{
+  id:'experience', name:'experience.log', ic:'log', icon:'LOG', lang:'Log', dir:null,
+  lines:[
+    `${n('2026-10')} ${d('→')} ${n('now    ')}  ${k('INFO')}  <span class="h">Queen's Tower Exchange</span> ${d('·')} FPGA Engineer, Exchange team`,
+    P(`<span class="logd">` + `Low-latency FPGA trading system. The exchange team owns the order book and matching engine.`),
+    B,
+    `${n('2026-07')} ${d('→')} ${n('2026-09')}  ${k('INFO')}  <span class="h">Huawei UK Research Labs</span> ${d('·')} CPU Architecture Intern`,
+    P(`<span class="logd">` + `TLB-miss-triggered hardware prefetcher for an ARM server core in gem5. See ` + `<a href="#tlb-prefetcher" data-open="tlb-prefetcher">projects/tlb_prefetcher.cpp</a>.`),
+    B,
+    `${n('2025-07')} ${d('→')} ${n('2025-09')}  ${k('INFO')}  <span class="h">Accenture</span> ${d('·')} Software Development Intern, Singapore`,
+    P(`<span class="logd">` + `Data automation tool adopted by 60+ employees (40% less manual processing) and a system-visualisation tool used by 100+ developers. C#, SQL.`),
+    B,
+    `${n('2025-05')} ${d('→')} ${n('2025-06')}  ${k('INFO')}  <span class="h">Optiver</span> ${d('·')} Imperial Trading Academy`,
+    P(`<span class="logd">` + `Month-long programme in market making and options pricing.`),
+    B,
+    `${n('2022-09')} ${d('→')} ${n('2024-07')}  ${k('INFO')}  <span class="h">Singapore Armed Forces</span> ${d('·')} Platoon Sergeant`,
+    P(`<span class="logd">` + `Led and trained a 60-person platoon: discipline, operational readiness, performance feedback.`),
+    B,
+    `${n('2018    ')} ${d('→')} ${n('2022   ')}  ${k('INFO')}  <span class="h">UWCSEA East</span> ${d('·')} IB 41/42`,
+  ]
+},
+{
+  id:'tlb-prefetcher', name:'tlb_prefetcher.cpp', ic:'cpp', icon:'C++', lang:'C++', dir:'projects',
+  lines: project({
+    title:'TLB-Miss-Triggered Hardware Prefetcher',
+    stack:'C++ · gem5 · Python · SPEC CPU2017 · Redis · MySQL',
+    role:'Huawei UK Research Labs, summer 2026 · solo research project',
+    what:[
+      `A TLB miss usually means the program has just moved into a new memory page. This prefetcher uses that as an early signal to fetch lines from the new page before the demand misses arrive. Built for a Kunpeng 920-class ARM server core.`
+    ],
+    part:[
+      `Instrumented the ARM MMU in gem5 to track TLB and L1D events together for every request.`,
+      `Built the pipeline: per-page stride tracker in the LSQ, merge/throttle table, CHI delivery to L1D or L2 with configurable lookahead.`,
+      `Wrote Python tooling to batch runs, parse simulator stats and plot results across SPEC CPU2017 and full-system Redis/MySQL.`,
+      `Traced an early +1% IPC "gain" to the core's built-in prefetcher being left on. Also showed syscall-emulation mode zeroes TLB stats, so moved evaluation to full-system mode.`,
+    ],
+    results:{
+      address_accuracy:'65.6%',
+      median_lead_time:'320 cycles',
+      l1_prefetches_redundant:'99% (demand won the race)',
+      redis_ipc_with_l2_delivery:'+1.8%',
+    },
+    links:[],
+    extra:[c('// code is internal to Huawei, happy to talk through it')]
+  })
+},
+{
+  id:'nn-accelerator', name:'nn_accelerator.sv', ic:'sv', icon:'SV', lang:'SystemVerilog', dir:'projects',
+  lines: project({
+    title:'FPGA Neural-Network Accelerator',
+    stack:'SystemVerilog · Verilator · Vivado · PYNQ-Z1',
+    role:'Year 2 design project, team · my part: the compute core',
+    what:[
+      `An MLP inference accelerator that renders a classifier's decision boundary live over HDMI. Move the inputs, the heatmap redraws in real time.`
+    ],
+    part:[
+      `MAC datapath, weight RAM, pipeline control and output FIFO.`,
+      `Equal-cycle pipelined MAC with fixed per-layer latency and no bubbles.`,
+      `Backpressure-aware FIFO decoupling the fixed-rate compute pipeline from the variable-rate HDMI display.`,
+      `Tuned fixed-point bit-widths to fit the DSP budget. Verified bit-exact against a Python golden model.`,
+    ],
+    results:{
+      clock:'125 MHz',
+      dsp_utilisation:'100%',
+      speedup_vs_cpu:'40x',
+      display:'live HDMI, ~20 fps',
+    },
+    links:[
+      ['https://github.com/Adi-111111/Snytax-Error','github.com/Adi-111111/Snytax-Error'],
+      ['https://aryanja.github.io/Design_Project_Summer__26-4.pdf','report.pdf'],
+    ]
+  })
+},
+{
+  id:'gesture-whiteboard', name:'gesture_whiteboard.sv', ic:'sv', icon:'SV', lang:'SystemVerilog', dir:'projects',
+  lines: project({
+    title:'Gesture-Based Collaborative Whiteboard',
+    stack:'SystemVerilog · AXI-Lite · PYNQ-Z1 · Python · AWS EC2 · DynamoDB',
+    role:'Information Processing, team of 7 · my part: the entire FPGA path',
+    what:[
+      `Pinch in front of a webcam to draw. A neural network on the FPGA recognises circles, rectangles, triangles and lines, and strokes sync live between users through a cloud server.`
+    ],
+    part:[
+      `First design: a four-stage geometry pipeline (resample, line simplification, circle fit, rectangle detect). Latency grew with stroke length, so I scrapped it.`,
+      `Replaced it with a 70-16-5 MLP as an AXI-Lite peripheral at 100 MHz, fixed latency regardless of input.`,
+      `Mixed fixed-point scaling: one global scale factor broke polygons, so coordinate and geometric features are scaled separately.`,
+      `Mapped MACs onto DSP blocks, cutting LUTs from 1596 to 600 and FFs from 2215 to 900.`,
+    ],
+    results:{
+      mlp_inference:'0.97 ms (2.38x vs software)',
+      full_recognition:'66 ms (5.9x vs software)',
+      end_to_end:'73.7 ms incl. network',
+      accuracy:'0.76 on held-out set',
+    },
+    extra:[
+      c('// demo'),
+      `<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/ka_kZNjIJMg" title="Gesture whiteboard demo" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`,
+    ],
+    links:[
+      ['https://github.com/Adi-111111/Info-Proc-CW','github.com/Adi-111111/Info-Proc-CW'],
+      ['https://youtu.be/ka_kZNjIJMg','youtu.be/ka_kZNjIJMg'],
+    ]
+  })
+},
+{
+  id:'riscv-cpu', name:'riscv_cache.sv', ic:'sv', icon:'SV', lang:'SystemVerilog', dir:'projects',
+  lines: project({
+    title:'RISC-V RV32I CPU &amp; Data Cache',
+    stack:'SystemVerilog · Verilator · GoogleTest',
+    role:'Instruction Architectures &amp; Compilers, team project · my part: the data cache',
+    what:[
+      `An RV32I processor in single-cycle and 5-stage pipelined versions, with a data cache in front of memory.`
+    ],
+    part:[
+      `Co-designed the core. Solely designed the cache: parameterised, 2-way set-associative, write-back, per-set LRU.`,
+      `Byte-granular SB/LBU and an FSM-controlled blocking miss path, with hit/miss performance counters.`,
+      `Integrated it into both cores, adding miss stalls and fixing load-use hazard interactions.`,
+      `Verified with self-checking C++ testbenches.`,
+    ],
+    results:{
+      associativity:'2-way',
+      policy:'write-back, LRU',
+      cores:'single-cycle + pipelined',
+    },
+    links:[
+      ['https://github.com/shivamsangani/IAC-Project-Team15','github.com/shivamsangani/IAC-Project-Team15'],
+    ]
+  })
+},
+{
+  id:'c-compiler', name:'c_compiler.c', ic:'c', icon:'C', lang:'C', dir:'projects',
+  lines: project({
+    title:'C Compiler',
+    stack:'C subset → RISC-V assembly',
+    role:'Imperial coursework (Language Processors)',
+    what:[
+      `A compiler that translates a subset of C into RISC-V assembly.`
+    ],
+    part:null,
+    results:{
+      target:'RISC-V',
+    },
+    links:[
+      ['https://github.com/LangProc/langproc-2025-cw-NairJain','github.com/LangProc/langproc-2025-cw-NairJain'],
+    ]
+  })
+},
+{
+  id:'udp-chat', name:'udp_chat.c', ic:'c', icon:'C', lang:'C', dir:'projects',
+  lines: project({
+    title:'Multithreaded UDP Chat',
+    stack:'C · POSIX threads · sockets',
+    role:'Imperial coursework',
+    what:[
+      `A concurrent chat server and client over UDP.`
+    ],
+    part:[
+      `Threaded clients and server with reader-writer locks.`,
+      `Private messaging and removal of inactive clients.`,
+    ],
+    results:{
+      transport:'UDP',
+      concurrency:'pthreads, rwlocks',
+    },
+    links:[]
+  })
+},
+{
+  id:'contact', name:'contact.json', ic:'json', icon:'{ }', lang:'JSON', dir:null,
+  lines:[
+    '{',
+    '  ' + pr('"name"') + ': ' + s('"Aryan Jain"') + ',',
+    '  ' + pr('"email"') + ': ' + s('"' + a('mailto:aryan.jain22@imperial.ac.uk','aryan.jain22@imperial.ac.uk') + '"') + ',',
+    '  ' + pr('"github"') + ': ' + s('"' + a('https://github.com/aryanja','github.com/aryanja') + '"') + ',',
+    '  ' + pr('"linkedin"') + ': ' + s('"' + a('https://www.linkedin.com/in/aryanjain31031014','linkedin.com/in/aryanjain31031014') + '"') + ',',
+    '  ' + pr('"resume"') + ': ' + s('"' + a('Aryan_Resume.pdf','Aryan_Resume.pdf') + '"') + ',',
+    '  ' + pr('"based_in"') + ': ' + s('"London, UK"') + ',',
+    '  ' + pr('"open_to"') + ': [' + s('"hardware"') + ', ' + s('"FPGA"') + ', ' + s('"computer architecture"') + ']',
+    '}',
+  ]
+},
+];
+const EXTERNAL = [{name:'resume.pdf', ic:'pdf', icon:'PDF', href:'Aryan_Resume.pdf'}];
+
+/* ---------- state ---------- */
+const byId = Object.fromEntries(FILES.map(f => [f.id, f]));
+let open = [];
+let active = null;
+
+const $ = id => document.getElementById(id);
+const tree = $('tree'), tabs = $('tabs'), code = $('code'), crumbs = $('crumbs');
+
+/* ---------- explorer ---------- */
+function fileRow(f, cls){
+  return `<li><button class="row ${cls}" data-id="${f.id}"><span class="ic ${f.ic}">${f.icon}</span>${f.name}</button></li>`;
+}
+function buildTree(){
+  const root = FILES.filter(f => !f.dir);
+  const proj = FILES.filter(f => f.dir === 'projects');
+  tree.innerHTML = `
+    <li><button class="row dir" data-dir="root"><span class="chev">▾</span>aryan-jain</button>
+      <ul class="tree">
+        ${fileRow(root[0],'indent')}
+        ${fileRow(root[1],'indent')}
+        <li><button class="row dir indent" data-dir="projects"><span class="chev">▾</span>projects</button>
+          <ul class="tree">${proj.map(f => fileRow(f,'indent2')).join('')}</ul>
+        </li>
+        ${root.slice(2).map(f => fileRow(f,'indent')).join('')}
+        ${EXTERNAL.map(e => `<li><a class="row indent" href="${e.href}" target="_blank" rel="noopener" style="text-decoration:none"><span class="ic ${e.ic}">${e.icon}</span>${e.name}<span class="d" style="margin-left:auto">↗</span></a></li>`).join('')}
+      </ul>
+    </li>`;
+}
+tree.addEventListener('click', e => {
+  const b = e.target.closest('button.row'); if (!b) return;
+  if (b.dataset.dir){ b.classList.toggle('closed'); return; }
+  openFile(b.dataset.id);
+  $('side').classList.remove('open');
+});
+
+/* ---------- tabs + editor ---------- */
+function openFile(id, push = true){
+  if (!byId[id]) id = 'readme';
+  if (!open.includes(id)) open.push(id);
+  active = id;
+  render();
+  code.scrollTop = 0;
+  if (push && location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+}
+function closeFile(id){
+  const i = open.indexOf(id);
+  open.splice(i, 1);
+  if (active === id) active = open[Math.min(i, open.length - 1)] || null;
+  render();
+  history.replaceState(null, '', active ? '#' + active : location.pathname);
+}
+function render(){
+  tabs.innerHTML = open.map(id => {
+    const f = byId[id];
+    return `<div class="tab ${id===active?'active':''}" role="tab" data-id="${id}"><button class="open-tab" data-id="${id}" style="display:flex;gap:6px;align-items:center"><span class="ic ${f.ic}">${f.icon}</span>${f.name}</button><button class="x" data-close="${id}" aria-label="Close ${f.name}">×</button></div>`;
+  }).join('');
+  document.querySelectorAll('.tree .row[data-id]').forEach(r => r.classList.toggle('active', r.dataset.id === active));
+
+  if (!active){
+    crumbs.innerHTML = '';
+    code.innerHTML = `<div class="empty"><div>No file open.<br>Pick one from the explorer, or press <kbd>⌘P</kbd>.</div></div>`;
+    $('stLang').textContent = ''; $('stLines').textContent = '';
+    document.title = 'Aryan Jain · Hardware Engineer';
+    return;
+  }
+  const f = byId[active];
+  crumbs.innerHTML = ['aryan-jain', f.dir, `<b>${f.name}</b>`].filter(Boolean).join(' <span>›</span> ');
+  code.innerHTML = f.lines.map(line => {
+    const isP = typeof line === 'object';
+    const html = isP ? line.t : line;
+    return `<div class="l${isP?' p':''}"><span class="t">${html || ' '}</span></div>`;
+  }).join('');
+  $('stLang').textContent = f.lang;
+  $('stLines').textContent = `${f.lines.length} lines`;
+  document.title = `${f.name} · Aryan Jain`;
+}
+tabs.addEventListener('click', e => {
+  const x = e.target.closest('[data-close]');
+  if (x){ closeFile(x.dataset.close); return; }
+  const t = e.target.closest('[data-id]');
+  if (t) openFile(t.dataset.id);
+});
+tabs.addEventListener('auxclick', e => {           // middle-click closes, like an editor
+  const t = e.target.closest('.tab'); if (t && e.button === 1) closeFile(t.dataset.id);
+});
+code.addEventListener('click', e => {
+  const l = e.target.closest('a[data-open]');
+  if (l){ e.preventDefault(); openFile(l.dataset.open); }
+});
+
+/* ---------- quick open (⌘P / Ctrl+P / "/") ---------- */
+const qo = $('qo'), qoInput = $('qoInput'), qoList = $('qoList');
+let qoItems = [], qoSel = 0;
+function qoRender(){
+  const q = qoInput.value.toLowerCase().trim();
+  qoItems = FILES.filter(f => (f.name + ' ' + (f.dir||'')).toLowerCase().includes(q));
+  qoSel = Math.min(qoSel, Math.max(qoItems.length - 1, 0));
+  qoList.innerHTML = qoItems.map((f,i) => `<li class="${i===qoSel?'on':''}" data-id="${f.id}"><span class="ic ${f.ic}">${f.icon}</span>${f.name}<span class="d">${f.dir||''}</span></li>`).join('')
+    || `<li class="d">no matching files</li>`;
+}
+function qoOpen(){ qo.classList.add('open'); qoInput.value=''; qoSel=0; qoRender(); qoInput.focus(); }
+function qoClose(){ qo.classList.remove('open'); }
+$('searchBtn').onclick = qoOpen;
+qo.addEventListener('click', e => {
+  const li = e.target.closest('li[data-id]');
+  if (li){ openFile(li.dataset.id); qoClose(); }
+  else if (e.target === qo) qoClose();
+});
+qoInput.addEventListener('input', () => { qoSel = 0; qoRender(); });
+qoInput.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown'){ qoSel = Math.min(qoSel+1, qoItems.length-1); qoRender(); e.preventDefault(); }
+  if (e.key === 'ArrowUp'){ qoSel = Math.max(qoSel-1, 0); qoRender(); e.preventDefault(); }
+  if (e.key === 'Enter' && qoItems[qoSel]){ openFile(qoItems[qoSel].id); qoClose(); }
+  if (e.key === 'Escape') qoClose();
+});
+document.addEventListener('keydown', e => {
+  const typing = /input|textarea/i.test(document.activeElement.tagName);
+  if (((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'p') || (e.key === '/' && !typing)){
+    e.preventDefault(); qo.classList.contains('open') ? qoClose() : qoOpen();
+  }
+  if (e.key === 'Escape') { qoClose(); $('side').classList.remove('open'); }
+});
+if (!/Mac|iPhone|iPad/.test(navigator.platform)) $('searchBtn').textContent = 'Ctrl+P';
+
+/* ---------- mobile explorer ---------- */
+$('menuBtn').onclick = () => $('side').classList.toggle('open');
+
+/* ---------- boot ---------- */
+buildTree();
+const start = location.hash.slice(1);
+open = ['readme'];
+if (start && byId[start] && start !== 'readme') openFile(start, false); else openFile('readme', false);
+window.addEventListener('hashchange', () => openFile(location.hash.slice(1), false));
 </script>
 </body>
 </html>
